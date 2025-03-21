@@ -1,55 +1,142 @@
 Page({
     data: {
-      name: '',
-      email: '',
-      course: '',
-      date: '',
-      message: ''
+        dates: [],
+        activeDate: '',
+        timeSlots: []
     },
-    bindNameInput: function(e) {
-      this.setData({
-        name: e.detail.value
-      });
+
+    onLoad() {
+        this.initTwoWeeksDates()
+        this.loadTimeSlots()
     },
-    bindEmailInput: function(e) {
-      this.setData({
-        email: e.detail.value
-      });
+
+    // 初始化两周日期（排除周末）
+    initTwoWeeksDates() {
+        const dates = this.getWeekdaysFromToday();
+
+        this.setData({
+            dates: dates,
+            activeDate: dates[0].date
+        })
     },
-    bindCourseChange: function(e) {
-      this.setData({
-        course: e.detail.value
-      });
+
+    getWeekdaysFromToday() {
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        let dates = [];
+
+        for (let i = 0; i <= 5 - dayOfWeek; i++) {
+            if (dayOfWeek <= 5) {
+                let date = new Date();
+                date.setDate(today.getDate() + i);
+                dates.push(this.formatDate(date));
+            }
+        }
+
+        for (let i = 1; i <= 5; i++) {
+            let date = new Date();
+            date.setDate(today.getDate() + (8 - dayOfWeek) + (i - 1));
+            dates.push(this.formatDate(date));
+        }
+
+        return dates;
     },
-    bindDateChange: function(e) {
-      this.setData({
-        date: e.detail.value
-      });
+
+    formatDate(date) {
+        return {
+            day: ['周一', '周二', '周三', '周四', '周五'][date.getDay() - 1],
+            date: date.toISOString().split('T')[0],
+            displayDate: `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
+        };
     },
-    formSubmit: function() {
-      const { name, email, course, date } = this.data;
-      if (!name || !email || !course || !date) {
-        wx.showToast({
-          title: 'Please fill in all fields',
-          icon: 'none'
-        });
-        return;
-      }
-  
-      // Here you can add logic to send the booking data to a server or store it locally
-      console.log(`Booking made by ${name} (${email}) for ${course} on${date}`);
-  
-      this.setData({
-        message: 'Your booking has been successfully submitted!',
-        name: '',
-        email: '',
-        course: '',
-        date: ''
-      });
-  
-      wx.showToast({
-        title: 'Success',
-        icon: 'success'
-      });
+
+    // 修改加载逻辑
+    loadTimeSlots() {
+        const storedData = wx.getStorageSync('bookings') || {}
+        const slots = this.generateTimeSlots()
+
+        if (storedData[this.data.activeDate]) {
+            slots.forEach((slot, index) => {
+                slot.booked = storedData[this.data.activeDate][index].booked
+            })
+        }
+
+        this.setData({ timeSlots: slots })
+    },
+
+    // 新增时间段过期检查
+    generateTimeSlots() {
+        const slots = []
+        let startHour = 14
+        let startMinute = 30
+
+        // 获取当前时间
+        const now = new Date()
+        const isToday = this.data.activeDate === now.toISOString().split('T')[0]
+
+        for (let i = 0; i < 6; i++) {
+            const endHour = startHour + Math.floor((startMinute + 60) / 60)
+            const endMinute = (startMinute + 60) % 60
+
+            // 时间段是否已过期（仅检查今天）
+            let expired = false
+            if (isToday) {
+                const currentMinutes = now.getHours() * 60 + now.getMinutes()
+                const slotStartMinutes = startHour * 60 + startMinute
+                expired = slotStartMinutes < currentMinutes
+            }
+
+            slots.push({
+                start: `${startHour.toString().padStart(2, '0')}:${startMinute.toString().padStart(2, '0')}`,
+                end: `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`,
+                booked: false,
+                expired: expired
+            })
+
+            startHour = endHour
+            startMinute = endMinute
+        }
+
+        return slots
+    },
+
+    // 切换日期
+    switchDate(e) {
+        const date = e.currentTarget.dataset.date
+        this.setData({ activeDate: date }, () => {
+            this.loadTimeSlots()
+        })
+    },
+
+    bookTime(e) {
+        const index = e.currentTarget.dataset.index
+        const slot = this.data.timeSlots[index]
+
+        if (slot.booked || slot.expired) {
+            wx.showToast({ title: '该时段不可预约', icon: 'none' })
+            return
+        }
+
+        wx.showModal({
+            title: '确认预约',
+            content: `确定预约 ${this.data.timeSlots[index].start} - ${this.data.timeSlots[index].end} 时段吗？`,
+            success: (res) => {
+                if (res.confirm) {
+                    const key = `timeSlots[${index}].booked`
+                    this.setData({
+                        [key]: true
+                    }, () => {
+                        this.saveBooking()
+                    })
+                }
+            }
+        })
+    },
+
+    // 保存预约数据
+    saveBooking() {
+        const storedData = wx.getStorageSync('bookings') || {}
+        storedData[this.data.activeDate] = this.data.timeSlots
+        wx.setStorageSync('bookings', storedData)
     }
-  });
+})

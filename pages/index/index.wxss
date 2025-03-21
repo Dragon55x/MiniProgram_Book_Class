@@ -1,56 +1,50 @@
-/* 全局样式 */
-page {
+/* index.wxss */
+.container {
+    padding: 20rpx;
+  }
+  
+  .nav {
+    white-space: nowrap;
+    margin-bottom: 30rpx;
+  }
+  
+  .nav-item {
+    display: inline-block;
+    width: 250rpx;
+    padding: 20rpx;
+    text-align: center;
+    border-bottom: 4rpx solid #eee;
+  }
+  
+  .nav-item.active {
+    border-color: #07c160;
+    color: #07c160;
+  }
+  
+  .time-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20rpx;
+  }
+  
+  .time-item {
+    padding: 30rpx;
+    border-radius: 10rpx;
+    background: #f0f9eb;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh;
-    background-color: #f4f4f9;
   }
-  .container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+  
+  .time-item.booked {
+    background: #ebeef5;
+    color: #999;
   }
-  .title {
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
+
+  .time-item.expired {
+    background: #fef0f0;
+    color: #f56c6c;
   }
-  .form-group {
-    margin-bottom: 15px;
-  }
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 16px;
-  }
-  .form-group input,
-  .form-group picker {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .form-group button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  .form-group button:hover {
-    background-color: #0056b3;
-  }
-  .message {
-    margin-top: 20px;
-    text-align: center;
-    color: green;
-    font-size: 16px;
+  .time-item.expired text:last-child {
+    content: '已过期';
   }
