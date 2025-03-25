@@ -27,4 +27,6 @@
       <text>{{item.booked ? '已预约' : '可预约'}}</text>
     </view>
   </view>
+
+  <button bindtap="Test">Test</button>
 </view>

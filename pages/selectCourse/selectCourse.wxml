@@ -1,0 +1,16 @@
+<!-- <view style="text-align: center; color: #b9b9b9">
+  <text class="title">选择要预约的课程</text>
+</view> -->
+
+<view style="height: 50rpx"></view>
+
+<view class="container">
+  <view class="course-grid">
+    <block wx:for="{{courses}}" wx:key="index">
+      <view class="course-card" bindtap="navigateToDetail" data-id="{{item}}">
+        <!--<image src="/assets/your-image.jpg" mode="aspectFill" class="bg-image"></image>-->
+        <text class="course-desc">{{item}}</text>
+      </view>
+    </block>
+  </view>
+</view>
