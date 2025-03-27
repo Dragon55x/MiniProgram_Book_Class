@@ -8,14 +8,6 @@ App({
   },
   globalData: {
     CourseTypes: ['钢琴', '古筝', '吉他', '声乐','瑜伽','民族舞'],
-    CourseTime: ['15:00-16:00','17:00-18:00','15:00-16:00','15:00-16:00'],
-    CourseIcons: [
-      "res/imgs/courseIcon/guitar.jpg",
-      "res/imgs/courseIcon/guzheng.jpg",
-      "res/imgs/courseIcon/guitar.jpg",
-      "res/imgs/courseIcon/",
-      "res/imgs/courseIcon/",
-      "res/imgs/courseIcon/",
-    ]
+    CourseTime: ['15:00-16:00','17:00-18:00','15:00-16:00','15:00-16:00']
   }
 })

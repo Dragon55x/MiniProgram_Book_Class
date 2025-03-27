@@ -141,13 +141,6 @@ Page({
   },
 
   Test() {
-    const db = wx.cloud.database();
-    db.collection('bookings').get()
-      .then(res => {
-        console.log('查询结果:', res.data);
-      })
-      .catch(err => {
-        console.error('查询失败:', err);
-      });
+    
   }
 })
