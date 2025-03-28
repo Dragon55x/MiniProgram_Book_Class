@@ -13,7 +13,6 @@ Page({
       success: res => {
         wx.hideLoading();
         this.setData({ courses: res.data.CourseTypes });
-        console.log(this.data.courses)
       },
       fail: err => {
         wx.hideLoading();

@@ -1,1 +1,31 @@
-<text>pages/bookCourse/bookCourse.wxml</text>
+
+<view class="container">
+    <text class="page-title">{{curCourse}}</text>
+
+    <!-- 周选择导航 -->
+    <scroll-view scroll-x class="nav">
+        <view 
+            wx:for="{{pageDates}}"
+            wx:key="index"
+            class="nav-item {{pageCurActiveIndex == index ? 'active' : ''}}" 
+            bindtap="switchDate" 
+            data-index="{{index}}">
+            <text>{{item.dayDesc + ' ' + item.dateDesc}}</text>
+            <text>{{item.date.slice(5)}}</text>
+        </view>
+    </scroll-view>
+
+    <!-- 时间段展示 -->
+    <view class="time-list">
+        <view 
+            wx:for="{{pageDates[pageCurActiveIndex].courseHours}}"
+            wx:key="index" 
+            class="time-item {{iitem.canBookCount <=0 ? 'booked' : ''}}"
+            bindtap="bookTime" 
+            data-hourIndex="{{item.hourIndex}}">
+            <text>{{courseHours[item.hourIndex]}}</text>
+            <text>最大人数：{{item.maxCount}}</text>
+            <text>可预约人数：{{item.canBookCount}}</text>
+        </view>
+    </view>
+</view>

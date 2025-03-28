@@ -1,1 +1,61 @@
-/* pages/bookCourse/bookCourse.wxss */
+/* index.wxss */
+.container {
+    padding: 20rpx;
+}
+
+.nav {
+    white-space: nowrap;
+    margin-bottom: 30rpx;
+}
+
+.nav-item {
+    display: inline-block;
+    width: 250rpx;
+    padding: 20rpx;
+    text-align: center;
+    border-bottom: 4rpx solid #eee;
+}
+
+.nav-item.active {
+    border-color: #07c160;
+    color: #07c160;
+}
+
+.time-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20rpx;
+}
+
+.time-item {
+    padding: 30rpx;
+    border-radius: 10rpx;
+    background: #f0f9eb;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.time-item.booked {
+    background: #ebeef5;
+    color: #999;
+}
+
+.time-item.expired {
+    background: #fef0f0;
+    color: #f56c6c;
+}
+
+.time-item.expired text:last-child {
+    content: '已过期';
+}
+
+.page-title {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    padding: 30rpx 0;
+    margin: 0 auto;
+    width: 100%;
+}
